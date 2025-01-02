@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"target": "ES2019",
+		"module": "CommonJS",
+		"outDir": "./dist",
+		"strict": true,
+		"esModuleInterop": true
+	},
+	"include": [
+		"auth/**/*.ts",
+		"config/**/*.ts",
+		"controllers/**/*.ts",
+		"docker/**/*.ts",
+		"helper/**/*.ts",
+		"middlewares/**/*.ts",
+		"misc/**/*.ts",
+		"models/**/*.ts",
+		"routes/**/*.ts",
+		"test/**/*.ts",
+		"server.ts",
+        "prisma/**/*.*",
+		"express.d.ts" // Agrega aquí el archivo de declaración de tipos
+	],
+	"exclude": ["node_modules/**/*", ".vscode/**/*"]
+}
