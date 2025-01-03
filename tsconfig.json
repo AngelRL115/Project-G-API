@@ -19,6 +19,8 @@
 		"test/**/*.ts",
 		"server.ts",
         "prisma/**/*.*",
+		"logger/**/*.*",
+		"logs/**/*.*",
 		"express.d.ts" // Agrega aquí el archivo de declaración de tipos
 	],
 	"exclude": ["node_modules/**/*", ".vscode/**/*"]

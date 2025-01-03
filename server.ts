@@ -6,14 +6,15 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsdoc from 'swagger-jsdoc'
-import log, {morganStream} from './logger/logger'
+import log, { morganStream } from './logger/logger'
 import * as dotenv from 'dotenv'
+import passport from 'passport'
 
 dotenv.config()
 
 const app = express()
 const port = process.env.PORT || 3000
-const logger = morgan('combined', {stream: morganStream})
+const logger = morgan('combined', { stream: morganStream })
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -60,6 +61,7 @@ const swaggerDocs = swaggerJsdoc(swaggerOptions)
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 app.use('/projectg', baseRouter)
+app.use(passport.initialize())
 
 app.use((req, res) => {
 	res.status(404).send({ error: 'invalid route' })
