@@ -56,7 +56,7 @@ export const newUser = async (req: Request, res: Response) => {
 			username,
 			password: hashedPassword,
 			tel,
-			rol: 1,
+			rol: 2,
 		}
 
 		const newUser = await prisma.user.create({
