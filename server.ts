@@ -6,13 +6,14 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJsdoc from 'swagger-jsdoc'
+import log, {morganStream} from './logger/logger'
 import * as dotenv from 'dotenv'
 
 dotenv.config()
 
 const app = express()
 const port = process.env.PORT || 3000
-const logger = morgan('combined')
+const logger = morgan('combined', {stream: morganStream})
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -69,5 +70,5 @@ app.get('/', (req, res) => {
 })
 
 app.listen(port, () => {
-	console.log(`Server running on port ${port}`)
+	log.info(`Server running on port ${port}`)
 })

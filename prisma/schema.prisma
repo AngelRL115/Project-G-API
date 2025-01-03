@@ -8,24 +8,25 @@ datasource db {
 }
 
 model rol {
-  idrol     Int       @id @unique(map: "idrol_UNIQUE") @default(autoincrement())
-  rol       String    @db.VarChar(45)
-  createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime? @default(now()) @db.Timestamp(0)
+  idrol     Int      @id @unique(map: "idrol_UNIQUE") @default(autoincrement())
+  rol       String   @db.VarChar(45)
+  CreatedAt DateTime @default(now()) @db.Timestamp(0)
+  UpdatedAt DateTime @default(now()) @db.Timestamp(0)
   user      user[]
 }
 
 model user {
-  iduser    Int       @id @unique(map: "iduser_UNIQUE") @default(autoincrement())
-  name      String    @db.VarChar(45)
-  lastname  String    @db.VarChar(45)
-  email     String    @db.VarChar(100)
-  password  String    @db.VarChar(45)
-  tel       String    @db.VarChar(45)
-  createdAt DateTime  @default(now()) @db.Timestamp(0)
-  updatedAt DateTime? @default(now()) @db.Timestamp(0)
+  iduser    Int      @id @unique(map: "iduser_UNIQUE") @default(autoincrement())
+  name      String   @db.VarChar(45)
+  lastname  String   @db.VarChar(45)
+  email     String   @db.VarChar(100)
+  username  String   @unique(map: "username_UNIQUE") @db.VarChar(45)
+  password  String   @db.VarChar(45)
+  tel       String   @db.VarChar(45)
+  CreatedAt DateTime @default(now()) @db.Timestamp(0)
+  UpdatedAt DateTime @default(now()) @db.Timestamp(0)
   rol_idrol Int
-  rol       rol       @relation(fields: [rol_idrol], references: [idrol], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_rol")
+  rol       rol      @relation(fields: [rol_idrol], references: [idrol], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_rol")
 
   @@index([rol_idrol], map: "fk_user_rol_idx")
 }
