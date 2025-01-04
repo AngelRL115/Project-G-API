@@ -16,17 +16,66 @@ model rol {
 }
 
 model user {
-  iduser    Int      @id @unique(map: "iduser_UNIQUE") @default(autoincrement())
-  name      String   @db.VarChar(45)
-  lastname  String   @db.VarChar(45)
-  email     String   @db.VarChar(100)
-  username  String   @unique(map: "username_UNIQUE") @db.VarChar(45)
-  password  String   @db.VarChar(45)
-  tel       String   @db.VarChar(45)
-  CreatedAt DateTime @default(now()) @db.Timestamp(0)
-  UpdatedAt DateTime @default(now()) @db.Timestamp(0)
-  rol_idrol Int
-  rol       rol      @relation(fields: [rol_idrol], references: [idrol], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_rol")
+  iduser      Int           @id @unique(map: "iduser_UNIQUE") @default(autoincrement())
+  name        String        @db.VarChar(45)
+  lastname    String        @db.VarChar(45)
+  email       String        @db.VarChar(100)
+  username    String        @unique(map: "username_UNIQUE") @db.VarChar(45)
+  password    String        @db.VarChar(200)
+  tel         String        @db.VarChar(45)
+  CreatedAt   DateTime      @default(now()) @db.Timestamp(0)
+  UpdatedAt   DateTime      @default(now()) @db.Timestamp(0)
+  rol_idrol   Int
+  coupon_book coupon_book[]
+  reservation reservation[]
+  rol         rol           @relation(fields: [rol_idrol], references: [idrol], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_rol")
 
   @@index([rol_idrol], map: "fk_user_rol_idx")
+}
+
+model class_schedule {
+  idclass_schedule Int           @id @unique(map: "idclass_schedule_UNIQUE") @default(autoincrement())
+  class_name       String        @db.VarChar(100)
+  date             DateTime      @db.Date
+  start_time       DateTime      @db.Time(0)
+  end_time         DateTime      @db.Time(0)
+  capacity         Int
+  available_spots  Int
+  CreatedAt        DateTime      @default(now()) @db.Timestamp(0)
+  UpdatedAt        DateTime      @default(now()) @db.Timestamp(0)
+  reservation      reservation[]
+}
+
+model coupon_book {
+  idcoupon_book     Int           @id @unique(map: "idcoupon_book_UNIQUE") @default(autoincrement())
+  price             String        @db.VarChar(45)
+  total_coupons     Int
+  remaining_coupons Int
+  expiration_date   DateTime      @db.DateTime(0)
+  purchase_date     DateTime      @db.DateTime(0)
+  user_iduser       Int
+  CreatedAt         DateTime      @default(now()) @db.DateTime(0)
+  UpdatedAt         DateTime      @default(now()) @db.DateTime(0)
+  user              user          @relation(fields: [user_iduser], references: [iduser], onDelete: NoAction, onUpdate: NoAction, map: "fk_coupon_book_user1")
+  reservation       reservation[]
+
+  @@index([user_iduser], map: "fk_coupon_book_user1_idx")
+}
+
+model reservation {
+  idreservation                   Int            @id @unique(map: "idreservation_UNIQUE") @default(autoincrement())
+  user_iduser                     Int
+  class_schedule_idclass_schedule Int
+  coupon_book_idcoupon_book       Int
+  reservation_date                DateTime       @db.DateTime(0)
+  is_canceled                     Int            @default(0)
+  CreatedAt                       DateTime       @default(now()) @db.Timestamp(0)
+  UpdatedAt                       DateTime       @default(now()) @db.Timestamp(0)
+  class_schedule                  class_schedule @relation(fields: [class_schedule_idclass_schedule], references: [idclass_schedule], onDelete: NoAction, onUpdate: NoAction, map: "fk_reservation_class_schedule1")
+  coupon_book                     coupon_book    @relation(fields: [coupon_book_idcoupon_book], references: [idcoupon_book], onDelete: NoAction, onUpdate: NoAction, map: "fk_reservation_coupon_book1")
+  user                            user           @relation(fields: [user_iduser], references: [iduser], onDelete: NoAction, onUpdate: NoAction, map: "fk_reservation_user1")
+
+  @@index([class_schedule_idclass_schedule], map: "fk_reservation_class_schedule1_idx")
+  @@index([coupon_book_idcoupon_book], map: "fk_reservation_coupon_book1_idx")
+  @@index([user_iduser], map: "fk_reservation_user1_idx")
 }
